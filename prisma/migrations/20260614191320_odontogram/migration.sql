@@ -1,0 +1,9 @@
+-- CreateTable
+CREATE TABLE "Odontogram" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "patientId" INTEGER NOT NULL,
+    "tooth" INTEGER NOT NULL,
+    "status" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "Odontogram_patientId_fkey" FOREIGN KEY ("patientId") REFERENCES "Patient" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);

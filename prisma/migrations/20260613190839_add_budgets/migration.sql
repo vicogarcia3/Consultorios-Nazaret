@@ -1,0 +1,9 @@
+-- CreateTable
+CREATE TABLE "Budget" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "patientId" INTEGER NOT NULL,
+    "treatments" TEXT NOT NULL,
+    "total" REAL NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "Budget_patientId_fkey" FOREIGN KEY ("patientId") REFERENCES "Patient" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
