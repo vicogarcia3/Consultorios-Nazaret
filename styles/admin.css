@@ -349,3 +349,321 @@
   margin-bottom: 20px;
 }
 
+
+/* ==========================================
+   NAVEGACIÓN DEL ADMINISTRADOR
+   ========================================== */
+
+.admin-mobile-header {
+  display: contents;
+}
+
+.admin-mobile-toggle {
+  display: none;
+}
+
+.admin-menu-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.admin-brand-logo {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.admin-nav-button {
+  background: transparent;
+}
+
+.admin-module-card:focus-visible,
+.admin-nav-item:focus-visible,
+.admin-mobile-toggle:focus-visible {
+  outline: 2px solid #52643c;
+  outline-offset: 3px;
+}
+
+/* ==========================================
+   ADMINISTRADOR EN CELULAR
+   ========================================== */
+
+@media (max-width: 750px) {
+  .admin-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* Encabezado compacto */
+
+  .admin-sidebar {
+    width: 100%;
+    min-height: auto;
+    height: auto;
+    position: relative;
+    overflow: visible;
+    padding: 0;
+    border-right: none;
+    border-bottom: 1px solid #dce3d5;
+    background: #eef1e9;
+    z-index: 10;
+  }
+
+  .admin-mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 15px 18px;
+  }
+
+  .admin-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 0;
+    border-bottom: none;
+  }
+
+  .admin-brand-logo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .admin-brand-text {
+    min-width: 0;
+  }
+
+  .admin-brand strong {
+    font-size: 14px;
+    line-height: 1.3;
+  }
+
+  .admin-brand span {
+    font-size: 11px;
+  }
+
+  .admin-mobile-toggle {
+    display: flex;
+    width: 42px;
+    height: 42px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: #ffffff;
+    color: #52643c;
+    border: 1px solid #d6dfcd;
+    border-radius: 11px;
+    cursor: pointer;
+  }
+
+  /* Menú desplegable */
+
+  .admin-menu-content {
+    display: none;
+    width: 100%;
+    padding: 6px 16px 18px;
+    border-top: 1px solid #d6dfcd;
+  }
+
+  .admin-menu-content.admin-menu-open {
+    display: flex;
+  }
+
+  .admin-navigation {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 8px;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .admin-nav-item {
+    width: 100%;
+    min-height: 46px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    white-space: normal;
+    text-align: left;
+  }
+
+  .admin-nav-group-title {
+    padding: 17px 13px 7px;
+    font-size: 10px;
+  }
+
+  .admin-sidebar-bottom {
+    margin-top: 14px;
+    padding-top: 12px;
+  }
+
+  /* Contenido principal */
+
+  .admin-main {
+    padding: 25px 16px 45px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .admin-welcome {
+    margin-bottom: 25px;
+  }
+
+  .admin-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+  }
+
+  .admin-welcome h1 {
+    font-size: clamp(27px, 7vw, 34px);
+    line-height: 1.15;
+    margin: 11px 0;
+  }
+
+  .admin-welcome p {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  /* Tarjetas de acceso */
+
+  .admin-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .admin-module-group {
+    margin-bottom: 0;
+  }
+
+  .admin-module-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    min-height: 145px;
+    padding: 17px 14px;
+    border-radius: 16px;
+    text-align: left;
+  }
+
+  .admin-module-card:hover {
+    transform: none;
+  }
+
+  .admin-module-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 14px;
+    border-radius: 11px;
+  }
+
+  .admin-module-icon svg {
+    width: 21px;
+    height: 21px;
+  }
+
+  .admin-module-card h3 {
+    font-size: 14px;
+    line-height: 1.35;
+    margin-bottom: 0;
+  }
+
+  .admin-module-card p {
+    display: none;
+  }
+
+  .admin-module-link {
+    margin-top: auto;
+    padding-top: 13px;
+    font-size: 11px;
+  }
+
+  .admin-module-link svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Sucursales ocupa el ancho de ambas columnas */
+
+  .admin-module-card:last-child {
+    grid-column: 1 / -1;
+    min-height: 92px;
+    display: grid;
+    grid-template-columns: 42px 1fr auto;
+    align-items: center;
+    column-gap: 12px;
+  }
+
+  .admin-module-card:last-child .admin-module-icon {
+    margin: 0;
+  }
+
+  .admin-module-card:last-child .admin-module-link {
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Cuando se abre una configuración,
+     ocultamos las tarjetas del panel en móvil */
+
+  .admin-main-editing .admin-dashboard-content {
+    display: none;
+  }
+
+  /* Formularios */
+
+  .admin-config-panel {
+    margin-top: 0;
+    padding: 20px 16px;
+    border-radius: 16px;
+    min-height: 0;
+    scroll-margin-top: 16px;
+  }
+
+  .admin-config-header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 17px;
+    margin-bottom: 24px;
+  }
+
+  .admin-config-header h2 {
+    font-size: 24px;
+    line-height: 1.2;
+    margin-top: 8px;
+  }
+
+  .admin-config-header .btn {
+    align-self: flex-start;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  .admin-main {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .admin-cards-grid {
+    gap: 9px;
+  }
+
+  .admin-module-card {
+    padding: 14px 12px;
+  }
+
+  .admin-module-card h3 {
+    font-size: 13px;
+  }
+}
