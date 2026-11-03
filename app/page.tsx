@@ -2,22 +2,18 @@ import Link from "next/link";
 import {
   UserRound,
   Award,
-  CalendarDays,
   HeartHandshake,
   MapPin,
   MonitorCheck,
   MessageCircle,
   Smile,
-  Sparkles,
   ArrowRight,
-  Mail,
-  Phone,
   Clock3,
   MapPinned,
   Instagram,
 } from "lucide-react";
 import Header from "@/components/header";
-import { getClinicContent, getWhatsAppUrl, type Service } from "@/lib/site-data";
+import { getClinicContent, getWhatsAppUrl } from "@/lib/site-data";
 import InsuranceCard from "../components/insurance-card";
 
 export const dynamic = "force-dynamic";
@@ -413,7 +409,17 @@ export default async function Home() {
           <span>
             © {new Date().getFullYear()} {data.name}
           </span>
+
           <span>Atención odontológica en Córdoba</span>
+
+          <Link
+            href="/iniciar-sesion"
+            className="admin-footer-link"
+            aria-label="Acceso al administrador"
+          >
+            <UserRound size={14} strokeWidth={1.6} />
+            <span>Acceso administrador</span>
+          </Link>
         </div>
       </footer>
     </>

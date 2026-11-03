@@ -1,6 +1,4 @@
-
-import { promises as fs } from "node:fs";
-import path from "node:path";
+import { put } from "@vercel/blob";
 import { randomUUID } from "node:crypto";
 
 import prisma from "../../../../lib/prisma";
@@ -163,28 +161,15 @@ export async function POST(request: Request) {
         );
       }
 
-      // Guardado local temporal.
-      // Antes de publicar en Vercel lo cambiaremos
-      // por almacenamiento persistente.
-      const directory = path.join(
-        process.cwd(),
-        "public",
-        "uploads",
-        "services"
-      );
+      const filename = `services/${randomUUID()}.${extension}`;
 
-      await fs.mkdir(directory, {
-        recursive: true,
+      const blob = await put(filename, image, {
+        access: "public",
+        addRandomSuffix: false,
+        contentType: image.type,
       });
 
-      const filename = `${randomUUID()}.${extension}`;
-
-      await fs.writeFile(
-        path.join(directory, filename),
-        Buffer.from(await image.arrayBuffer())
-      );
-
-      imageUrl = `/uploads/services/${filename}`;
+      imageUrl = blob.url;
     }
 
     if (existing) {

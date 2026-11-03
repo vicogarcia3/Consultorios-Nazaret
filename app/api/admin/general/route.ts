@@ -1,7 +1,7 @@
 
-import { promises as fs } from "node:fs";
-import path from "node:path";
 import { randomUUID } from "node:crypto";
+import { put, del } from "@vercel/blob";
+
 import { isAdmin } from "../../../../lib/admin-access";
 import prisma from "../../../../lib/prisma";
 import { getClinicContent } from "../../../../lib/site-data";
@@ -9,29 +9,8 @@ import { getClinicContent } from "../../../../lib/site-data";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// Restricción temporal para desarrollo.
-// No sustituye un sistema real de autenticación.
-function isLocal(request: Request) {
-  const host = request.headers.get("host") ?? "";
-  const origin = request.headers.get("origin");
-
-  if (!/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host)) {
-    return false;
-  }
-
-  if (origin) {
-    try {
-      return new URL(origin).host === host;
-    } catch {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-// Obtener los datos actuales
-export async function GET(request: Request) {
+// Obtener los datos actuales de la configuración.
+export async function GET() {
   if (!(await isAdmin())) {
     return Response.json(
       { error: "Acceso no permitido." },
@@ -59,23 +38,30 @@ export async function GET(request: Request) {
   }
 }
 
-// Guardar una imagen (temporalmente en disco local)
+// Guardar una imagen en Vercel Blob.
 async function saveImage(
   value: FormDataEntryValue | null,
-  prefix: string
+  prefix: "logo" | "portada"
 ): Promise<string | null> {
   if (!(value instanceof File) || value.size === 0) {
     return null;
   }
 
-  if (value.size > 15 * 1024 * 1024) {
-    throw new Error("La imagen supera el límite de 15 MB.");
+  // Dejamos un margen respecto al límite de las
+  // solicitudes de las funciones de Vercel.
+  if (value.size > 4 * 1024 * 1024) {
+    throw new Error(
+      "La imagen no puede superar los 4 MB."
+    );
   }
 
   const bytes = Buffer.from(await value.arrayBuffer());
 
   let extension: "jpg" | "png" | "webp" | null = null;
+  let contentType: string | null = null;
 
+  // Verificamos el formato real de la imagen,
+  // incluso si su extensión original es incorrecta.
   if (
     bytes.length >= 3 &&
     bytes[0] === 0xff &&
@@ -83,6 +69,7 @@ async function saveImage(
     bytes[2] === 0xff
   ) {
     extension = "jpg";
+    contentType = "image/jpeg";
   } else if (
     bytes.length >= 8 &&
     bytes.subarray(0, 8).equals(
@@ -90,53 +77,57 @@ async function saveImage(
     )
   ) {
     extension = "png";
+    contentType = "image/png";
   } else if (
     bytes.length >= 12 &&
     bytes.toString("ascii", 0, 4) === "RIFF" &&
     bytes.toString("ascii", 8, 12) === "WEBP"
   ) {
     extension = "webp";
+    contentType = "image/webp";
   }
 
-  if (!extension) {
-    throw new Error("La imagen debe ser JPG, PNG o WebP.");
+  if (!extension || !contentType) {
+    throw new Error(
+      "La imagen debe ser JPG, PNG o WebP."
+    );
   }
 
-  const directory = path.join(
-    process.cwd(),
-    "public",
-    "uploads",
-    "general"
-  );
+  const filename = `general/${prefix}-${randomUUID()}.${extension}`;
 
-  await fs.mkdir(directory, { recursive: true });
+  const blob = await put(filename, bytes, {
+    access: "public",
+    contentType,
+    addRandomSuffix: false,
+  });
 
-  const filename = `${prefix}-${randomUUID()}.${extension}`;
-
-  await fs.writeFile(
-    path.join(directory, filename),
-    bytes
-  );
-
-  return `/uploads/general/${filename}`;
+  return blob.url;
 }
 
-// Guardar la configuración en Neon
+// Guardar la configuración en Neon.
 export async function POST(request: Request) {
   if (!(await isAdmin())) {
     return Response.json(
-      { error: "Edición disponible solo en desarrollo local." },
+      { error: "Acceso no permitido." },
       { status: 403 }
     );
   }
+
+  const uploadedUrls: string[] = [];
+  let savedInDatabase = false;
 
   try {
     const form = await request.formData();
 
     const name = String(form.get("name") ?? "").trim();
-    const whatsapp = String(form.get("whatsapp") ?? "")
-      .replace(/\D/g, "");
-    const email = String(form.get("email") ?? "").trim();
+
+    const whatsapp = String(
+      form.get("whatsapp") ?? ""
+    ).replace(/\D/g, "");
+
+    const email = String(
+      form.get("email") ?? ""
+    ).trim();
 
     if (!name) {
       return Response.json(
@@ -145,7 +136,10 @@ export async function POST(request: Request) {
       );
     }
 
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (
+      email &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    ) {
       return Response.json(
         { error: "Ingresá un correo electrónico válido." },
         { status: 400 }
@@ -156,15 +150,30 @@ export async function POST(request: Request) {
       where: { id: 1 },
     });
 
-    const logo =
-      (await saveImage(form.get("logo"), "logo")) ??
-      current?.logoUrl ??
-      null;
+    // Conservamos las imágenes actuales si no se
+    // selecciona un archivo nuevo.
+    let logoUrl = current?.logoUrl ?? null;
+    let heroImageUrl = current?.heroImageUrl ?? null;
 
-    const hero =
-      (await saveImage(form.get("hero"), "portada")) ??
-      current?.heroImageUrl ??
-      null;
+    const newLogo = await saveImage(
+      form.get("logo"),
+      "logo"
+    );
+
+    if (newLogo) {
+      uploadedUrls.push(newLogo);
+      logoUrl = newLogo;
+    }
+
+    const newHero = await saveImage(
+      form.get("hero"),
+      "portada"
+    );
+
+    if (newHero) {
+      uploadedUrls.push(newHero);
+      heroImageUrl = newHero;
+    }
 
     const settings = await prisma.siteConfig.upsert({
       where: { id: 1 },
@@ -174,25 +183,45 @@ export async function POST(request: Request) {
         name,
         whatsapp: whatsapp || null,
         email: email || null,
-        logoUrl: logo,
-        heroImageUrl: hero,
+        logoUrl,
+        heroImageUrl,
       },
 
       update: {
         name,
         whatsapp: whatsapp || null,
         email: email || null,
-        logoUrl: logo,
-        heroImageUrl: hero,
+        logoUrl,
+        heroImageUrl,
       },
     });
+
+    savedInDatabase = true;
 
     return Response.json({
       success: true,
       data: settings,
     });
   } catch (error) {
-    console.error("Error al guardar configuración:", error);
+    // Si falló el guardado, intentamos limpiar
+    // las imágenes nuevas que se hayan subido.
+    if (!savedInDatabase) {
+      for (const url of uploadedUrls) {
+        try {
+          await del(url);
+        } catch (cleanupError) {
+          console.warn(
+            "No se pudo limpiar la imagen nueva de Blob:",
+            cleanupError
+          );
+        }
+      }
+    }
+
+    console.error(
+      "Error al guardar configuración:",
+      error
+    );
 
     return Response.json(
       {

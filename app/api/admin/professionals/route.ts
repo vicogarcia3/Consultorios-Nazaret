@@ -1,7 +1,5 @@
-
-import { promises as fs } from "node:fs";
-import path from "node:path";
 import { randomUUID } from "node:crypto";
+import { del, put } from "@vercel/blob";
 
 import prisma from "../../../../lib/prisma";
 import { isAdmin } from "../../../../lib/admin-access";
@@ -26,10 +24,16 @@ async function getProfessionals() {
     specialties: person.specialties,
     imageUrl: person.imageUrl,
     active: person.active,
-    branchIds: person.branches.map(
-      (item) => item.branchId
-    ),
+    branchIds: person.branches.map((item) => item.branchId),
   }));
+}
+
+function isBlobUrl(url: string | null | undefined) {
+  return Boolean(
+    url &&
+      (url.includes(".public.blob.vercel-storage.com") ||
+        url.includes(".blob.vercel-storage.com"))
+  );
 }
 
 export async function GET() {
@@ -94,6 +98,17 @@ export async function POST(request: Request) {
         );
       }
 
+      if (isBlobUrl(existing.imageUrl)) {
+        try {
+          await del(existing.imageUrl!);
+        } catch (error) {
+          console.warn(
+            "No se pudo eliminar la imagen del profesional en Blob:",
+            error
+          );
+        }
+      }
+
       await prisma.professional.delete({
         where: { id },
       });
@@ -141,13 +156,9 @@ export async function POST(request: Request) {
 
     if (
       !Array.isArray(specialties) ||
-      !specialties.every(
-        (value) => typeof value === "string"
-      ) ||
+      !specialties.every((value) => typeof value === "string") ||
       !Array.isArray(branchIds) ||
-      !branchIds.every(
-        (value) => typeof value === "string"
-      )
+      !branchIds.every((value) => typeof value === "string")
     ) {
       return Response.json(
         { error: "Datos de especialidades o sucursales inválidos." },
@@ -161,9 +172,7 @@ export async function POST(request: Request) {
       ),
     ];
 
-    branchIds = [
-      ...new Set(branchIds),
-    ];
+    branchIds = [...new Set(branchIds)];
 
     if (!name || !license) {
       return Response.json(
@@ -200,10 +209,20 @@ export async function POST(request: Request) {
       );
     }
 
-    let imageUrl: string | null =
-      existing?.imageUrl ?? null;
+    let imageUrl: string | null = existing?.imageUrl ?? null;
 
     if (form.get("removeImage") === "true") {
+      if (isBlobUrl(imageUrl)) {
+        try {
+          await del(imageUrl!);
+        } catch (error) {
+          console.warn(
+            "No se pudo eliminar la imagen del profesional en Blob:",
+            error
+          );
+        }
+      }
+
       imageUrl = null;
     }
 
@@ -217,11 +236,11 @@ export async function POST(request: Request) {
         );
       }
 
-      const bytes = Buffer.from(
-        await image.arrayBuffer()
-      );
+      const bytes = Buffer.from(await image.arrayBuffer());
 
       let extension: "jpg" | "png" | "webp" | null = null;
+      let contentType: "image/jpeg" | "image/png" | "image/webp" | null =
+        null;
 
       if (
         bytes.length >= 3 &&
@@ -230,6 +249,7 @@ export async function POST(request: Request) {
         bytes[2] === 0xff
       ) {
         extension = "jpg";
+        contentType = "image/jpeg";
       } else if (
         bytes.length >= 8 &&
         bytes.subarray(0, 8).equals(
@@ -237,15 +257,17 @@ export async function POST(request: Request) {
         )
       ) {
         extension = "png";
+        contentType = "image/png";
       } else if (
         bytes.length >= 12 &&
         bytes.toString("ascii", 0, 4) === "RIFF" &&
-        bytes.toString("ascii", 8, 4) === "WEBP"
+        bytes.toString("ascii", 8, 12) === "WEBP"
       ) {
         extension = "webp";
+        contentType = "image/webp";
       }
 
-      if (!extension) {
+      if (!extension || !contentType) {
         return Response.json(
           {
             error:
@@ -255,25 +277,26 @@ export async function POST(request: Request) {
         );
       }
 
-      const directory = path.join(
-        process.cwd(),
-        "public",
-        "uploads",
-        "professionals"
-      );
+      if (isBlobUrl(existing?.imageUrl)) {
+        try {
+          await del(existing!.imageUrl!);
+        } catch (error) {
+          console.warn(
+            "No se pudo eliminar la imagen anterior del profesional en Blob:",
+            error
+          );
+        }
+      }
 
-      await fs.mkdir(directory, {
-        recursive: true,
+      const filename = `professionals/${randomUUID()}.${extension}`;
+
+      const blob = await put(filename, bytes, {
+        access: "public",
+        contentType,
+        addRandomSuffix: false,
       });
 
-      const filename = `${randomUUID()}.${extension}`;
-
-      await fs.writeFile(
-        path.join(directory, filename),
-        bytes
-      );
-
-      imageUrl = `/uploads/professionals/${filename}`;
+      imageUrl = blob.url;
     }
 
     const active = form.get("active") === "true";

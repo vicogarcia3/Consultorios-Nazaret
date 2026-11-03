@@ -1,15 +1,16 @@
-'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { CalendarDays, Menu, X, HeartPulse } from 'lucide-react';
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { Menu, X, HeartPulse } from "lucide-react";
 
 const navItems = [
-  { label: 'Inicio', id: 'inicio' },
-  { label: 'Servicios', id: 'servicios' },
-  { label: 'Equipo', id: 'equipo' },
-  { label: 'Obras sociales', id: 'obras-sociales' },
-  { label: 'Encontranos', id: 'contacto' },
+  { label: "Inicio", id: "inicio" },
+  { label: "Servicios", id: "servicios" },
+  { label: "Equipo", id: "equipo" },
+  { label: "Obras sociales", id: "obras-sociales" },
+  { label: "Encontranos", id: "contacto" },
 ];
 
 type HeaderProps = {
@@ -19,28 +20,38 @@ type HeaderProps = {
 
 export default function Header({ name, logoUrl }: HeaderProps) {
   const [open, setOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('inicio');
+  const [activeSection, setActiveSection] = useState("inicio");
 
   useEffect(() => {
     const updateActive = () => {
-      // Consideramos activa la última sección que haya alcanzado el encabezado.
       const offset = 140;
-      let current = 'inicio';
+      let current = "inicio";
+
       for (const item of navItems) {
         const section = document.getElementById(item.id);
-        if (section && section.getBoundingClientRect().top <= offset) {
+
+        if (
+          section &&
+          section.getBoundingClientRect().top <= offset
+        ) {
           current = item.id;
         }
       }
+
       setActiveSection(current);
     };
 
     updateActive();
-    window.addEventListener('scroll', updateActive, { passive: true });
-    window.addEventListener('resize', updateActive);
+
+    window.addEventListener("scroll", updateActive, {
+      passive: true,
+    });
+
+    window.addEventListener("resize", updateActive);
+
     return () => {
-      window.removeEventListener('scroll', updateActive);
-      window.removeEventListener('resize', updateActive);
+      window.removeEventListener("scroll", updateActive);
+      window.removeEventListener("resize", updateActive);
     };
   }, []);
 
@@ -51,21 +62,25 @@ export default function Header({ name, logoUrl }: HeaderProps) {
           className="brand"
           href="/#inicio"
           aria-label={`${name}, ir al inicio`}
-          onClick={() => { setOpen(false); setActiveSection('inicio'); }}
+          onClick={() => {
+            setOpen(false);
+            setActiveSection("inicio");
+          }}
         >
           {logoUrl ? (
-            <img 
-              className="brand-image" 
-              src={logoUrl} 
-              alt="Logo del consultorio" 
+            <img
+              className="brand-image"
+              src={logoUrl}
+              alt="Logo del consultorio"
             />
           ) : (
-            <HeartPulse 
-              aria-hidden="true" 
-              className="brand-symbol" 
-              strokeWidth={1.5} 
+            <HeartPulse
+              aria-hidden="true"
+              className="brand-symbol"
+              strokeWidth={1.5}
             />
           )}
+
           <span className="brand-name">{name}</span>
         </Link>
 
@@ -84,7 +99,9 @@ export default function Header({ name, logoUrl }: HeaderProps) {
                   : "nav-link"
               }
               aria-current={
-                activeSection === item.id ? "location" : undefined
+                activeSection === item.id
+                  ? "location"
+                  : undefined
               }
               onClick={() => {
                 setOpen(false);
@@ -97,27 +114,20 @@ export default function Header({ name, logoUrl }: HeaderProps) {
 
           <div className="mobile-actions">
             <Link
-              href="/iniciar-sesion"
-              className="btn btn-outline"
-              onClick={() => setOpen(false)}
-            >
-              Iniciar sesión
-            </Link>
-
-            <Link
               href="/#contacto"
               className="btn btn-primary"
               onClick={() => setOpen(false)}
             >
-              <CalendarDays size={18} />
-              Reservar turno
+              Contactanos
             </Link>
           </div>
         </nav>
 
         <div className="nav-actions">
-          <Link href="/iniciar-sesion" className="btn btn-outline">Iniciar sesión</Link>
-          <Link href="/#contacto" className="btn btn-primary">
+          <Link
+            href="/#contacto"
+            className="btn btn-primary"
+          >
             Contactanos
           </Link>
         </div>
