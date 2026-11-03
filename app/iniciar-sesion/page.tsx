@@ -12,39 +12,38 @@ export default function IniciarSesionPage() {
   const [registrationAvailable, setRegistrationAvailable] =
     useState(false);
 
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [activationKey, setActivationKey] = useState("");
-
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    async function checkAdministrator() {
+    async function checkAdmin() {
       try {
         const response = await fetch("/api/auth/admin-setup", {
           cache: "no-store",
         });
 
         if (!response.ok) {
-          throw new Error("No se pudo verificar el administrador.");
+          throw new Error("Error al verificar la cuenta.");
         }
 
         const data = await response.json();
 
-        setRegistrationAvailable(data.registrationAvailable === true);
+        setRegistrationAvailable(
+          data.registrationAvailable === true
+        );
       } catch {
         setError(
-          "No se pudo verificar la configuración del administrador."
+          "No se pudo verificar el acceso administrativo."
         );
       } finally {
         setChecking(false);
       }
     }
 
-    void checkAdministrator();
+    void checkAdmin();
   }, []);
 
   async function handleSubmit(
@@ -62,10 +61,8 @@ export default function IniciarSesionPage() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            name: name.trim(),
             email: email.trim().toLowerCase(),
             password,
-            activationKey,
           }),
         });
 
@@ -84,9 +81,6 @@ export default function IniciarSesionPage() {
         }
 
         setRegistrationAvailable(false);
-        setActivationKey("");
-
-        // La cuenta ya existe. Iniciamos sesión normalmente.
       }
 
       const result = await signIn("credentials", {
@@ -97,7 +91,7 @@ export default function IniciarSesionPage() {
 
       if (result?.error) {
         setError(
-          "No se pudo iniciar sesión. Verificá el correo y la contraseña."
+          "Correo electrónico o contraseña incorrectos."
         );
         return;
       }
@@ -124,10 +118,7 @@ export default function IniciarSesionPage() {
 
   return (
     <main className="login-page">
-      <form
-        className="login-card"
-        onSubmit={handleSubmit}
-      >
+      <form className="login-card" onSubmit={handleSubmit}>
         <div className="login-icon">
           {registrationAvailable ? (
             <UserRound size={28} />
@@ -144,27 +135,9 @@ export default function IniciarSesionPage() {
 
         <p>
           {registrationAvailable
-            ? "Configurá la cuenta principal de Consultorios Nazaret."
+            ? "Creá la cuenta principal de Consultorios Nazaret."
             : "Ingresá con tu cuenta de Consultorios Nazaret."}
         </p>
-
-        {registrationAvailable && (
-          <div className="settings-field">
-            <label htmlFor="admin-name">
-              Nombre completo
-            </label>
-
-            <input
-              id="admin-name"
-              type="text"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              placeholder="Ingresá tu nombre"
-              autoComplete="name"
-              required
-            />
-          </div>
-        )}
 
         <div className="settings-field">
           <label htmlFor="login-email">
@@ -205,7 +178,9 @@ export default function IniciarSesionPage() {
                   ? "new-password"
                   : "current-password"
               }
-              minLength={registrationAvailable ? 12 : undefined}
+              minLength={
+                registrationAvailable ? 12 : undefined
+              }
               required
             />
 
@@ -231,26 +206,6 @@ export default function IniciarSesionPage() {
           </div>
         </div>
 
-        {registrationAvailable && (
-          <div className="settings-field">
-            <label htmlFor="activation-key">
-              Clave de activación inicial
-            </label>
-
-            <input
-              id="activation-key"
-              type="password"
-              value={activationKey}
-              onChange={(event) =>
-                setActivationKey(event.target.value)
-              }
-              placeholder="Ingresá la clave de activación"
-              autoComplete="off"
-              required
-            />
-          </div>
-        )}
-
         {!registrationAvailable && (
           <Link
             href="/olvide-contrasena"
@@ -269,14 +224,14 @@ export default function IniciarSesionPage() {
         <button
           type="submit"
           className="btn btn-primary"
-          disabled={loading || checking}
+          disabled={loading || Boolean(error && checking)}
         >
           {loading
             ? registrationAvailable
               ? "Creando cuenta..."
               : "Ingresando..."
             : registrationAvailable
-              ? "Crear cuenta administradora"
+              ? "Crear cuenta"
               : "Iniciar sesión"}
         </button>
       </form>
