@@ -178,9 +178,6 @@ export default function IniciarSesionPage() {
                   ? "new-password"
                   : "current-password"
               }
-              minLength={
-                registrationAvailable ? 12 : undefined
-              }
               required
             />
 

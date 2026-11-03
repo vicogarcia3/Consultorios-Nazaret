@@ -65,12 +65,9 @@ export async function POST(request: Request) {
       );
     }
 
-    if (password.length < 12 || password.length > 128) {
+    if (!password) {
       return Response.json(
-        {
-          error:
-            "La contraseña debe tener entre 12 y 128 caracteres.",
-        },
+        { error: "Ingresá una contraseña." },
         { status: 400 }
       );
     }
