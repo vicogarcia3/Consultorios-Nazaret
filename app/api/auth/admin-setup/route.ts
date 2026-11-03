@@ -80,7 +80,7 @@ export async function POST(request: Request) {
       async (tx) => {
         // Evita dos registros simultáneos mediante esta API.
         await tx.$queryRaw`
-          SELECT pg_advisory_xact_lock(71824031)
+          SELECT pg_advisory_xact_lock(71824031)::text AS lock_result
         `;
 
         const userCount = await tx.user.count();
