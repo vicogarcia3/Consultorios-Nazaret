@@ -1,0 +1,176 @@
+/* ==================================
+   FORMULARIO ADMIN - SERVICIOS
+================================== */
+
+.services-admin {
+  display: flex;
+  flex-direction: column;
+  gap: 38px;
+}
+
+.services-admin h3 {
+  font-size: 20px;
+  margin: 0 0 5px;
+  color: var(--ink);
+}
+
+#service-form {
+  scroll-margin-top: 25px;
+}
+
+.settings-field textarea {
+  width: 100%;
+  border: 1px solid #d8decc;
+  border-radius: 11px;
+  padding: 12px 15px;
+  background: white;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.settings-field textarea:focus-visible {
+  outline: 2px solid var(--sage);
+  outline-offset: 2px;
+}
+
+/* VISTA PREVIA */
+
+.service-admin-preview {
+  width: 100%;
+  height: 190px;
+  border-radius: 15px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #eaf0e3, #f8f8f2);
+  color: var(--sage);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.service-admin-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.service-remove-image {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding: 7px 0;
+  border: none;
+  background: transparent;
+  color: #a13535;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.services-admin .settings-actions {
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* LISTADO DE SERVICIOS */
+
+.services-admin-list {
+  border-top: 1px solid #e4e7dc;
+  padding-top: 30px;
+}
+
+.services-admin-list h3 {
+  margin-bottom: 22px;
+}
+
+.service-admin-item {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 16px;
+  border: 1px solid #e4e7dc;
+  border-radius: 14px;
+  background: #fafbf8;
+  margin-bottom: 12px;
+}
+
+.service-admin-thumbnail {
+  width: 70px;
+  height: 65px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: #e2e9d8;
+  color: var(--sage);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.service-admin-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.service-admin-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.service-admin-info strong {
+  display: block;
+  font-size: 15px;
+  color: var(--ink);
+  margin-bottom: 5px;
+}
+
+.service-admin-info p {
+  color: #68747a;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.service-admin-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.service-admin-buttons button {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  border: 1px solid #e0e5d9;
+  background: white;
+  color: var(--sage-dark);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.service-admin-buttons button:hover {
+  background: #e2e9d8;
+}
+
+@media (max-width: 600px) {
+  .service-admin-item {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .service-admin-thumbnail {
+    width: 60px;
+    height: 60px;
+  }
+
+  .service-admin-buttons {
+    margin-left: auto;
+  }
+}
+

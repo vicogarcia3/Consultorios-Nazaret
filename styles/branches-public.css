@@ -1,0 +1,193 @@
+/* ==================================
+   ENCONTRANOS - SUCURSALES
+================================== */
+
+#contacto .section-kicker,
+#contacto h2 {
+  text-align: center;
+}
+
+.branches-description {
+  text-align: center;
+  color: #69736f;
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 650px;
+  margin: -10px auto 38px;
+}
+
+/* TARJETAS DE SUCURSALES */
+
+.branches-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  max-width: 1050px;
+  margin: 0 auto;
+}
+
+.branch-card {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid #e2e7db;
+  border-radius: 22px;
+  padding: 28px;
+  min-width: 0;
+  box-shadow: 0 6px 20px rgba(30, 40, 25, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.branch-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(30, 40, 25, 0.09);
+}
+
+.branch-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.branch-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e2e9d8;
+  color: var(--sage-dark);
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+
+.branch-heading h3 {
+  margin: 0 0 4px;
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.branch-heading span {
+  font-size: 13px;
+  color: #89928a;
+}
+
+.branch-address {
+  font-size: 14px;
+  color: #576453;
+  line-height: 1.7;
+  margin: 22px 0;
+}
+
+.branch-divider {
+  height: 1px;
+  background: #e4e7dc;
+  margin-bottom: 22px;
+}
+
+.branch-hours {
+  margin-bottom: 28px;
+}
+
+.branch-hours-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--sage-dark);
+  margin-bottom: 14px;
+}
+
+.branch-hours-title strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.branch-hours p {
+  color: #576453;
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 4px 0 4px 29px;
+}
+
+/* BOTÓN GOOGLE MAPS */
+
+.branch-map-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: auto;
+  min-height: 43px;
+  padding: 10px 20px;
+  border: 1px solid var(--sage);
+  border-radius: 999px;
+  color: var(--sage-dark);
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.branch-map-button:hover {
+  background: #eef1e9;
+}
+
+/* BLOQUE DE CONTACTO */
+
+.branches-contact {
+  max-width: 1050px;
+  margin: 30px auto 0;
+  padding: 38px 24px;
+  background: #e2e9d8;
+  border-radius: 22px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.branches-contact h3 {
+  font-family: Georgia, serif;
+  font-size: 29px;
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0;
+}
+
+.branches-contact p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #576453;
+  margin: 0 0 8px;
+}
+
+.branches-whatsapp-pending {
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: #f1f3ed;
+  color: #687c4f;
+  font-size: 14px;
+}
+
+/* CELULARES */
+
+@media (max-width: 700px) {
+  .branches-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .branch-card {
+    padding: 24px;
+  }
+
+  .branches-contact {
+    padding: 30px 20px;
+  }
+
+  .branches-contact h3 {
+    font-size: 25px;
+  }
+}
+

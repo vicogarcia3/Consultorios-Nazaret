@@ -1,0 +1,100 @@
+/* ==================================
+   MENU RESPONSIVE - CELULARES
+================================== */
+
+@media (max-width: 900px) {
+
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    overflow: visible;
+  }
+
+  .nav-wrap {
+    min-height: 70px;
+    position: relative;
+  }
+
+  /* Botón hamburguesa */
+
+  .menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--ink);
+    cursor: pointer;
+    padding: 10px;
+    margin-left: auto;
+  }
+
+  /* Menú cerrado */
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+
+    background: #faf8f4;
+    padding: 20px 5% 25px;
+
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+
+    border-bottom: 1px solid #e4e7dc;
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Menú abierto */
+
+  .nav-links.nav-open {
+    display: flex;
+  }
+
+  /* Enlaces */
+
+  .nav-links > .nav-link {
+    width: 100%;
+    padding: 13px 15px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+
+  .nav-links > .nav-link:hover {
+    background: #eef1e9;
+  }
+
+  .nav-links > .nav-link.active {
+    background: #e2e9d8;
+    color: var(--sage-dark);
+  }
+
+  .nav-links > .nav-link.active::after {
+    display: none;
+  }
+
+  /* Botones de acceso */
+
+  .nav-actions {
+    display: none;
+  }
+
+  .mobile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .mobile-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+

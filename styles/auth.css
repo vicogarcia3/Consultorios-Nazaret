@@ -1,0 +1,180 @@
+/* =====================================
+   INICIO DE SESIÓN
+===================================== */
+
+.login-page {
+  min-height: calc(100vh - 90px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 45px 20px;
+  background: #f5f7f1;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 40px;
+  border-radius: 22px;
+  background: white;
+  box-shadow: 0 12px 40px rgba(28, 48, 32, 0.08);
+}
+
+.login-icon {
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  background: #e2e9d8;
+  color: #52643c;
+}
+
+.login-card h1 {
+  font-family: Georgia, serif;
+  font-size: 29px;
+  color: #26352d;
+  margin: 0;
+}
+
+.login-card > p {
+  color: #68747a;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.login-card .btn-primary {
+  min-height: 46px;
+}
+
+.login-card .settings-field input[type="password"] {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 15px;
+  border: 1px solid #d8decc;
+  border-radius: 11px;
+  font: inherit;
+  font-size: 14px;
+}
+
+.professional-welcome {
+  max-width: 900px;
+  margin: 70px auto;
+  padding: 30px;
+}
+
+.professional-welcome h1 {
+  font-family: Georgia, serif;
+  color: #26352d;
+}
+
+@media (max-width: 600px) {
+  .login-card {
+    padding: 28px 22px;
+  }
+}
+
+/* ACTIVACIÓN DE CUENTAS */
+
+.login-card .settings-field small {
+  color: #6b7280;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.login-card .settings-error {
+  padding: 12px 15px;
+  border-radius: 10px;
+  background: #fff1f0;
+  color: #a32929;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* MOSTRAR Y OCULTAR CONTRASEÑA */
+
+.login-password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.login-password-wrapper input {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 48px 12px 15px;
+  border: 1px solid #d8decc;
+  border-radius: 11px;
+  background: #fff;
+  color: #1d2b39;
+  font: inherit;
+  font-size: 14px;
+}
+
+.login-password-wrapper input:focus-visible {
+  outline: 2px solid #687c4f;
+  outline-offset: 2px;
+}
+
+.login-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: #68747a;
+  cursor: pointer;
+}
+
+.login-password-toggle:hover {
+  color: #52643c;
+  transform: translateY(-50%);
+}
+
+.login-card > .btn-primary {
+  width: 100%;
+}
+
+/* RECUPERACIÓN DE CONTRASEÑA */
+
+.forgot-password-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #52643c;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.forgot-password-back:hover {
+  color: #35452a;
+  text-decoration: underline;
+}
+
+.login-card .btn-primary {
+  text-align: center;
+}
+.forgot-password-link {
+  align-self: flex-end;
+  color: #52643c;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.forgot-password-link:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,75 @@
+/* INSTAGRAM DE CADA SUCURSAL */
+
+.branch-instagram {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid #e4e7dc;
+  color: #52643c;
+  font-size: 13px;
+}
+
+.branch-instagram span {
+  color: #52643c;
+}
+
+.branch-instagram a {
+  color: #52643c;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.branch-instagram a:hover {
+  color: #263d2b;
+}
+
+/* SUCURSALES SIN HORARIOS FIJOS */
+
+.branch-hours-optional {
+  color: #687c4f;
+  font-size: 14px;
+  font-style: italic;
+  margin-top: 12px;
+}
+
+/* BOTONES DE LAS SUCURSALES */
+
+.branch-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.branch-actions .branch-map-button {
+  width: 100%;
+  margin: 0;
+}
+
+.branch-whatsapp-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 11px 16px;
+  border-radius: 999px;
+  background: #687c4f;
+  border: 1px solid #687c4f;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.branch-whatsapp-button:hover {
+  background: #52643c;
+  color: #ffffff;
+}
+

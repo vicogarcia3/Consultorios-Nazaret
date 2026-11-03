@@ -1,0 +1,162 @@
+/* ===== SERVICIOS ===== */
+
+.services-carousel {
+  width: 100%;
+  overflow: hidden;
+  padding: 8px 0 24px;
+}
+
+.services-track {
+  display: flex;
+  width: 100%;
+}
+
+.services-group {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+/* TARJETAS */
+
+.service-card {
+  min-width: 0;
+  background: #faf8f4;
+  border: 1px solid #e9e8e1;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(30, 40, 25, 0.06);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(30, 40, 25, 0.1);
+}
+
+/* FOTOGRAFIA */
+
+.service-image {
+  width: 100%;
+  height: 175px;
+  overflow: hidden;
+  background: #eaf0e3;
+}
+
+.service-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.service-card:hover .service-image img {
+  transform: scale(1.04);
+}
+
+/* SIN IMAGEN */
+
+.service-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #eaf0e3, #f8f8f2);
+  color: var(--sage);
+}
+
+/* CONTENIDO */
+
+.service-body {
+  padding: 20px 22px 24px;
+}
+
+.service-card h3 {
+  font-family: Georgia, serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0 0 12px;
+}
+
+.service-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #59636a;
+  margin: 0;
+}
+
+/* DESPLAZAMIENTO AUTOMATICO */
+
+.services-animated .services-track {
+  width: max-content;
+  animation: services-scroll 25s linear infinite;
+}
+
+.services-animated .services-group {
+  display: flex;
+  width: max-content;
+  gap: 20px;
+  padding-right: 20px;
+}
+
+.services-animated .service-card {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+@keyframes services-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* PAUSAR AL INTERACTUAR */
+
+.services-animated:hover .services-track,
+.services-animated:focus-within .services-track {
+  animation-play-state: paused;
+}
+
+/* PANTALLAS MEDIANAS Y CELULARES */
+
+@media (max-width: 900px) {
+  .services-carousel:not(.services-animated) {
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .services-carousel:not(.services-animated) .services-track {
+    width: max-content;
+  }
+
+  .services-carousel:not(.services-animated) .services-group {
+    display: flex;
+    width: max-content;
+  }
+
+  .services-carousel:not(.services-animated) .service-card {
+    width: 260px;
+    flex-shrink: 0;
+  }
+}
+
+/* ACCESIBILIDAD */
+
+@media (prefers-reduced-motion: reduce) {
+  .services-animated .services-track {
+    animation: none;
+  }
+
+  .services-animated {
+    overflow-x: auto;
+  }
+}
+

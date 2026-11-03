@@ -1,172 +1,159 @@
+
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
 }
 
-model Plan {
-  id       Int       @id @default(autoincrement())
-  name     String
-  price    Float
+// =====================================
+// CONFIGURACIÓN GENERAL
+// =====================================
+
+model SiteConfig {
+  id           Int     @id @default(1)
+  name         String
+  slogan       String?
   description  String?
-  benefits    String?
-
-  patients Patient[]
-  membershipRequests MembershipRequest[]
-}
-
-model Patient {
-  id             Int       @id @default(autoincrement())
-  name           String
-  dni            String    @unique
-  phone          String?
-
-  planId         Int?
-  plan           Plan?     @relation(fields: [planId], references: [id])
-
-  joinDate       DateTime?
-  nextCleaning   DateTime?
-
-  paymentStatus  String    @default("al_dia")
-  notes          String?
-
-  turns          Turn[]
-
-  payments Payment[]
-  budgets Budget[]
-  attachments Attachment[]
-  medicalRecords MedicalRecord[]
-  odontograms Odontogram[]
-
-  createdAt      DateTime  @default(now())
-}
-
-model Doctor {
-  id        Int      @id @default(autoincrement())
-  name      String
-  specialty String
-  photo String?
-
-  turns     Turn[]
-}
-
-model Turn {
-  id        Int      @id @default(autoincrement())
-  date      DateTime
-  status    String   @default("pending")
-
-  patientId Int
-  doctorId  Int
-
-  patient   Patient  @relation(fields: [patientId], references: [id])
-  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+  logoUrl      String?
+  heroImageUrl String?
+  whatsapp     String?
+  phone        String?
+  email        String?
+  address      String?
+  mapsUrl      String?
+  instagramUrl String?
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-  model Payment {
-  id          Int       @id @default(autoincrement())
+// =====================================
+// SERVICIOS
+// =====================================
 
-  patientId   Int
-  patient     Patient   @relation(fields: [patientId], references: [id])
-
-  amount      Float
-
-  month       String
-
-  dueDate     DateTime
-
-  paidDate    DateTime?
-
-  status      String    @default("pending")
-
-  createdAt   DateTime  @default(now())
-}
-
-model Budget {
-  id          Int      @id @default(autoincrement())
-
-  patientId   Int
-  patient     Patient  @relation(fields: [patientId], references: [id])
-
-  treatments  String
-
-  total       Float
-
-  createdAt   DateTime @default(now())
-}
-
-model MedicalRecord {
-  id          Int      @id @default(autoincrement())
-
-  patientId   Int
-  patient     Patient  @relation(fields: [patientId], references: [id])
-
+model Service {
+  id          String  @id @default(cuid())
   title       String
-  diagnosis   String?
-  treatment   String?
-  notes       String?
-
-  createdAt   DateTime @default(now())
-}
-
-model Attachment {
-  id        String   @id @default(cuid())
-  fileName  String
-  fileUrl   String
-  fileType  String   // pdf, image, etc.
-
-  patientId Int
-  patient   Patient  @relation(fields: [patientId], references: [id])
+  description String?
+  imageUrl    String?
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Odontogram {
-  id        Int      @id @default(autoincrement())
+// =====================================
+// PROFESIONALES DE LA PÁGINA PÚBLICA
+// =====================================
 
-  patientId Int
-  patient   Patient  @relation(fields: [patientId], references: [id])
+model Professional {
+  id          String   @id @default(cuid())
+  name        String
+  license     String
+  specialties String[]
+  imageUrl    String?
+  active      Boolean  @default(true)
 
-  tooth     Int
-  status    String
+  branches ProfessionalBranch[]
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active])
+}
+
+// =====================================
+// SUCURSALES
+// =====================================
+
+model Branch {
+  id           String   @id @default(cuid())
+  name         String
+  address      String
+  hours        String[]
+  mapsUrl      String?
+  whatsapp     String?
+  instagramUrl String?
+
+  professionals ProfessionalBranch[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// =====================================
+// RELACIÓN PROFESIONALES - SUCURSALES
+// =====================================
+
+model ProfessionalBranch {
+  professionalId String
+  branchId       String
+
+  professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+  branch       Branch       @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@id([professionalId, branchId])
+  @@index([branchId])
+}
+
+// =====================================
+// OBRAS SOCIALES
+// =====================================
+
+model InsuranceProvider {
+  id      String  @id @default(cuid())
+  name    String  @unique
+  logoUrl String?
+  active  Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// =====================================
+// AUTENTICACIÓN DEL ADMINISTRADOR
+// =====================================
+
+// Conservamos temporalmente los valores anteriores
+// hasta limpiar las cuentas antiguas de Neon.
+enum UserRole {
+  ADMIN
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id              String   @id @default(cuid())
+  name            String
+  email           String   @unique
+  role            UserRole
+  active          Boolean  @default(true)
 
-  name      String
-  email     String   @unique
-  password  String
+  passwordHash    String?
+  emailVerifiedAt DateTime?
+  sessionVersion  Int      @default(0)
 
-  role      String   @default("professional")
-
-  createdAt DateTime @default(now())
-}
-
-model MembershipRequest {
-  id        Int      @id @default(autoincrement())
-
-  firstName String
-  lastName  String
-
-  email     String
-  phone     String
-
-  planId    Int
-  plan      Plan     @relation(fields: [planId], references: [id])
-
-  status    String   @default("pending")
+  passwordResets PasswordResetToken[]
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Config {
-  id        Int    @id @default(autoincrement())
-  whatsapp  String?
+// =====================================
+// RECUPERACIÓN DE CONTRASEÑA
+// =====================================
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }

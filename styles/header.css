@@ -1,0 +1,123 @@
+/* Encabezado renovado — compacto, tipografía limpia y sección activa */
+body {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+html {
+  scroll-padding-top: 88px;
+}
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.nav-wrap {
+  min-height: 74px;
+  gap: 20px;
+}
+.brand {
+  gap: 10px;
+  max-width: 225px;
+  min-width: 0;
+  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+}
+.brand-name {
+  display: block;
+  max-width: 170px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+.brand-symbol {
+  width: 35px;
+  height: 39px;
+  flex-shrink: 0;
+}
+.brand-image {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.nav-links {
+  gap: clamp(12px, 1.5vw, 23px);
+}
+.nav-links > .nav-link {
+  position: relative;
+  padding: 11px 2px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+.nav-links > .nav-link.active {
+  color: var(--sage-dark);
+  font-weight: 700;
+}
+.nav-links > .nav-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  left: 1px;
+  right: 1px;
+  height: 2px;
+  background: var(--sage);
+  border-radius: 4px;
+}
+.nav-actions {
+  gap: 9px;
+}
+.nav-actions .btn {
+  min-height: 39px;
+  padding: 8px 15px;
+  font-size: 13px;
+}
+@media (max-width: 1150px) {
+  .brand {
+    max-width: 195px;
+  }
+  .brand-name {
+    max-width: 145px;
+    font-size: 15px;
+  }
+  .nav-wrap {
+    gap: 14px;
+  }
+  .nav-links {
+    gap: 11px;
+  }
+  .nav-links > .nav-link {
+    font-size: 12px;
+  }
+  .nav-actions .btn {
+    padding: 8px 12px;
+  }
+}
+@media (max-width: 900px) {
+  .nav-wrap {
+    min-height: 70px;
+  }
+  .nav-links {
+    gap: 13px;
+  }
+  .nav-links > .nav-link {
+    width: fit-content;
+    font-size: 15px;
+  }
+  .nav-links > .nav-link.active::after {
+    bottom: 3px;
+  }
+}
+@media (max-width: 560px) {
+  .nav-wrap {
+    min-height: 66px;
+  }
+  .brand-name {
+    font-size: 15px;
+  }
+  .brand-symbol {
+    width: 32px;
+    height: 36px;
+  }
+}
+

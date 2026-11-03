@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Consultorios Nazaret — nueva web (versión inicial)
 
-## Getting Started
+Proyecto independiente de la web existente. No modifica consultoriosnazaret.com.
 
-First, run the development server:
+## Ejecutar
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Instalar Node.js (20.9 o superior).
+2. Abrir esta carpeta en VS Code.
+3. Abrir terminal y ejecutar `npm install`.
+4. Ejecutar `npm run dev`.
+5. Abrir http://localhost:3000.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Editar contenido provisional
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`lib/site-data.ts` contiene los textos, servicios, equipo, obras sociales, logo, foto y contacto. Para cargar imágenes provisionales, copiar archivos en `public/` y usar rutas como `/consultorio.jpg`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `heroImageUrl: '/consultorio.jpg'`
+- `logoUrl: '/logo.png'`
+- `whatsapp: '5493511234567'` (número de ejemplo; reemplazar por el real)
 
-## Learn More
+## Próximas etapas
 
-To learn more about Next.js, take a look at the following resources:
+- Definir base de datos y panel administrador.
+- Sustituir `getClinicContent()` por la lectura de datos publicados.
+- Implementar autenticación con roles y seguridad.
+- Implementar reservas y su flujo de administración.
+- Validación, pruebas y migración en un despliegue separado antes de reemplazar la web actual.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Nota:** Iniciar sesión y Reservar turno muestran páginas temporales (no son formularios funcionales). Los tratamientos listados son ejemplos y deben verificarse. No se publican números ni datos de contacto ficticios.
